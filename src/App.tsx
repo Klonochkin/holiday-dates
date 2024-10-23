@@ -1,150 +1,134 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 
+interface Holiday {
+    holidays: {
+        text: string;
+        pages: {
+            title: string;
+            content_urls: {
+                desktop: {
+                    page: string;
+                };
+            };
+        }[];
+    }[];
+}
+
+const month: string[] = [
+    'Январь',
+    'Февраль',
+    'Март',
+    'Апрель',
+    'Май',
+    'Июнь',
+    'Июль',
+    'Август',
+    'Сентябрь',
+    'Октябрь',
+    'Ноябрь',
+    'Декабрь',
+];
+
+const today = new Date();
+
+function HolidayCard({
+    text,
+    link,
+    linkTitle,
+}: {
+    text: string;
+    link: string;
+    linkTitle: string;
+}) {
+    return (
+        <div>
+            <p>{text}</p>
+            <a href={link} target='_blank'>
+                {linkTitle}
+            </a>
+        </div>
+    );
+}
+
+function HolidayList({ data }: { data?: Holiday }) {
+    if (data?.holidays && data?.holidays.length > 0) {
+        return (
+            <ul>
+                {data.holidays.map((holiday, i) => (
+                    <HolidayCard
+                        key={i}
+                        text={holiday?.text}
+                        link={holiday?.pages[0]?.content_urls?.desktop?.page}
+                        linkTitle={holiday?.pages[0]?.title}></HolidayCard>
+                ))}
+            </ul>
+        );
+    } else {
+        return <p>Праздников нету</p>;
+    }
+}
+
 function App() {
-    const today = new Date();
-    const toDay = today.getDate();
-    const toMonth = today.getMonth();
-    const [inner, setInner] = useState<React.ReactElement[]>([]);
-    const [whatIsDay, setDay] = useState<number>(toDay);
-    const [whatIsMonth, setMonth] = useState(toMonth);
-    const countDayInMonth: number[] = [
-        31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31,
-    ];
-    const month: string[] = [
-        'Январь',
-        'Февраль',
-        'Март',
-        'Апрель',
-        'Май',
-        'Июнь',
-        'Июль',
-        'Август',
-        'Сентябрь',
-        'Октябрь',
-        'Ноябрь',
-        'Декабрь',
-    ];
-    const daysInMonth = Array.from({
-        length: new Date(today.getFullYear(), whatIsMonth + 1, 0).getDate(),
-    }).map((_, i) => ++i);
-
-    const monthInYear = Array.from({ length: 12 }).map((_, i) => ++i);
-
-    const [daysInCurrentMonth, setDaysInCurrentMonth] =
-        useState<number[]>(daysInMonth);
+    const [currentDay, setCurrentDay] = useState<number>(today.getDate());
+    const [currentMonth, setCurrentMonth] = useState(today.getMonth());
+    const [data, setData] = useState<Holiday>();
+    const [daysInCurrentMonth, setdaysInCurrentMonth] = useState<number[]>();
+    const [date] = useState(today);
 
     useEffect(() => {
-        setDaysInCurrentMonth(daysInMonth);
-        if (whatIsDay > countDayInMonth[whatIsMonth]) {
-            setDay(1);
-        } else {
-            checkHolidayDate();
+        if (currentDay > new Date(2020, currentMonth + 1, 0).getDate()) {
+            setCurrentDay(new Date(2020, currentMonth + 1, 0).getDate());
+            console.log(currentMonth);
+            date.setDate(currentDay);
+            date.setMonth(currentMonth);
+            return;
         }
-    }, [whatIsMonth]);
+        getHolidays();
+        date.setMonth(currentMonth);
+        date.setDate(currentDay);
+    }, [currentDay, currentMonth]);
 
     useEffect(() => {
-        checkHolidayDate();
-    }, [whatIsDay]);
+        setdaysInCurrentMonth(
+            Array.from({
+                length: new Date(2020, currentMonth + 1, 0).getDate(),
+            }).map((_, i) => ++i),
+        );
+    }, [currentMonth]);
 
-    function nextDay(flag: boolean) {
-        if (flag) {
-            setDay(whatIsDay - 1);
-        } else {
-            setDay(whatIsDay + 1);
-        }
-        if (!flag && whatIsDay >= countDayInMonth[whatIsMonth]) {
-            if (whatIsMonth + 1 > 11) {
-                setMonth(0);
-            } else {
-                setMonth(whatIsMonth + 1);
-            }
-            setDay(1);
-        }
-        if (flag && whatIsDay <= 1) {
-            if (whatIsMonth - 1 < 0) {
-                setMonth(11);
-            } else {
-                setMonth(whatIsMonth - 1);
-            }
-            setDay(countDayInMonth[whatIsMonth]);
-        }
+    function nextDay() {
+        date.setDate(date.getDate() + 1);
+        setCurrentDay(date.getDate());
+        setCurrentMonth(date.getMonth());
     }
 
-    async function checkHolidayDate() {
-        const url = `https://ru.wikipedia.org/api/rest_v1/feed/onthisday/holidays/${whatIsMonth + 1}/${whatIsDay}`;
-
-        try {
-            const response = await fetch(url);
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! статус: ${response.status}`);
-            }
-
-            const data = await response.json();
-            if (data) {
-                setInner([]);
-                if (data.holidays.length !== 0) {
-                    interface ContentUrls {
-                        desktop: {
-                            page: string;
-                        };
-                    }
-
-                    interface Page {
-                        title: string;
-                        content_urls: ContentUrls;
-                    }
-
-                    interface Holiday {
-                        text: string;
-                        date: string;
-                        pages: Page[];
-                    }
-                    console.log(data.holidays[0].pages[0].title);
-                    data.holidays.forEach((el: Holiday, i: number) => {
-                        const newInner = (
-                            <>
-                                <div key={i}>
-                                    <p>{el?.text}</p>
-                                    <a
-                                        href={
-                                            el?.pages[0]?.content_urls?.desktop
-                                                ?.page
-                                        }
-                                        target='_blank'>
-                                        {el?.pages[0]?.title}
-                                    </a>
-                                </div>
-                            </>
-                        );
-                        setInner((prevInner) => [...prevInner, newInner]);
-                    });
-                } else {
-                    const newInner = <p key={0}>Праздников нету</p>;
-                    setInner((prevInner) => [...prevInner, newInner]);
-                }
-            } else {
-            }
-        } catch (error) {
-            console.error('Ошибка при выполнении запроса:', error);
-        }
+    function prevDay() {
+        date.setDate(date.getDate() - 1);
+        setCurrentDay(date.getDate());
+        setCurrentMonth(date.getMonth());
     }
+
+    function getHolidays() {
+        const url = `https://ru.wikipedia.org/api/rest_v1/feed/onthisday/holidays/${currentMonth + 1}/${currentDay}`;
+        fetch(url)
+            .then((response) => response.json())
+            .then((res) => setData(res));
+    }
+
     return (
         <>
             <div className='container'>
-                <button
-                    className='container__button'
-                    onClick={() => nextDay(true)}>
+                <button className='container__button' onClick={() => prevDay()}>
                     назад
                 </button>
                 <select
-                    value={whatIsDay}
+                    value={currentDay}
                     name='1'
                     id='1'
                     className='container__select'
                     onChange={(event) => {
-                        setDay(Number(event.target.value));
+                        setCurrentDay(Number(event.target.value));
                     }}>
                     {daysInCurrentMonth?.map((day, i) => (
                         <option value={day} key={i}>
@@ -152,29 +136,29 @@ function App() {
                         </option>
                     ))}
                 </select>
-                <button
-                    className='container__button'
-                    onClick={() => nextDay(false)}>
+                <button className='container__button' onClick={() => nextDay()}>
                     вперёд
                 </button>
 
                 <select
-                    value={whatIsMonth + 1}
+                    value={currentMonth}
                     name='2'
                     id='2'
                     className='container__select'
                     onChange={(event) => {
-                        setMonth(Number(event.target.value) - 1);
+                        setCurrentMonth(Number(event.target.value));
                     }}>
-                    {monthInYear?.map((day, i) => (
-                        <option value={day} key={i}>
-                            {month[day - 1]}
+                    {month?.map((day, i) => (
+                        <option value={i} key={i}>
+                            {day}
                         </option>
                     ))}
                 </select>
             </div>
 
-            <div>{inner}</div>
+            <div>
+                <HolidayList data={data} />
+            </div>
         </>
     );
 }
