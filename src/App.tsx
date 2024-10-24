@@ -44,7 +44,7 @@ function HolidayCard({
     linkTitle?: string;
 }) {
     return (
-        <li className='list-item'>
+        <li className='list-item' onClick={() => window.open(link)}>
             <p className='paragraph'>{text}</p>
             {link && linkTitle && (
                 <a href={link} className='link' target='_blank'>
@@ -148,7 +148,7 @@ function App() {
                     </option>
                 ))}
             </select>
-            <label>
+            <label className='search'>
                 Поиск:
                 <input
                     type='search'
