@@ -60,6 +60,22 @@
     list-style-type: none;
 }
 
+.list-item {
+    margin: 15px;
+    padding: 15px;
+
+    text-align: left;
+
+    background: #323232;
+    border: 1px whitesmoke solid;
+    border-radius: 15px;
+}
+
+.paragraph {
+    margin: 0;
+    padding: 0;
+}
+
 .visually-hidden {
     position: absolute;
 

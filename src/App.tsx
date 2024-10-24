@@ -44,8 +44,8 @@ function HolidayCard({
     linkTitle?: string;
 }) {
     return (
-        <li>
-            <p>{text}</p>
+        <li className='list-item'>
+            <p className='paragraph'>{text}</p>
             {link && linkTitle && (
                 <a href={link} className='link' target='_blank'>
                     {linkTitle}
