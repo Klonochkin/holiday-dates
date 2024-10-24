@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "lint": "eslint . && stylelint .",
-    "lint:fix": "pnpm lint:es --fix && pnpm lint:css -- --fix",
+    "lint": "pnpm lint:es && pnpm lint:css && pnpm check-types && pnpm check-format",
+    "lint:fix": "pnpm lint:es --fix && pnpm lint:css -- --fix && pnpm format",
     "lint:es": "eslint .",
     "lint:es:fix": "eslint . --fix",
     "lint:css": "stylelint .",
