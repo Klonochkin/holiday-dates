@@ -44,7 +44,7 @@ function HolidayCard({
     linkTitle?: string;
 }) {
     return (
-        <li className='list-item' onClick={() => window.open(link)}>
+        <li className='list-item'>
             <p className='paragraph'>{text}</p>
             {link && linkTitle && (
                 <a href={link} className='link' target='_blank'>
