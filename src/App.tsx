@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 
 interface HolidayInfo {
     text: string;
@@ -55,16 +55,10 @@ function HolidayCard({
     );
 }
 
-function HolidayList({
-    data,
-    inputRef,
-}: {
-    data?: HolidayInfo[];
-    inputRef: React.RefObject<HTMLUListElement>;
-}) {
+function HolidayList({ data }: { data?: HolidayInfo[] }) {
     if (data && data.length > 0) {
         return (
-            <ul className='list' ref={inputRef}>
+            <ul className='list'>
                 {data.map(({ text, pages: [page] }, i) => (
                     <HolidayCard
                         key={i}
@@ -83,41 +77,9 @@ function HolidayList({
 function App() {
     const today = new Date();
     const [data, setData] = useState<HolidayInfo[]>();
-    const [daysInCurrentMonth, setdaysInCurrentMonth] = useState<number[]>();
+    const [daysInCurrentMonth, setDaysInCurrentMonth] = useState<number[]>();
     const [date, setNewDate] = useState(today);
     const [searchValue, setSearchValue] = useState('');
-    const inputRef = useRef<HTMLUListElement>(null);
-
-    useEffect(() => {
-        getHolidays();
-    }, [date]);
-
-    useEffect(() => {
-        search();
-    }, [data, searchValue]);
-
-    useEffect(() => {
-        setdaysInCurrentMonth(
-            Array.from({
-                length: new Date(2020, date.getMonth() + 1, 0).getDate(),
-            }).map((_, i) => ++i),
-        );
-    }, [date.getMonth()]);
-
-    function search() {
-        let myString: null | string = 'none';
-        const arrayParagraph = inputRef?.current?.querySelectorAll('p');
-        arrayParagraph?.forEach((p) => {
-            myString = p.textContent;
-            if (!searchValue) {
-                p?.parentElement?.classList.remove('visually-hidden');
-            } else if (myString?.includes(searchValue)) {
-                p?.parentElement?.classList.remove('visually-hidden');
-            } else {
-                p?.parentElement?.classList.add('visually-hidden');
-            }
-        });
-    }
 
     function nextDay() {
         setNewDate(new Date(date.setDate(date.getDate() + 1)));
@@ -133,6 +95,22 @@ function App() {
             .then((response) => response.json())
             .then(({ holidays }: HolidayData) => setData(holidays));
     }
+
+    const filterData = data?.filter(({ text }) =>
+        text.toLocaleLowerCase().includes(searchValue.trim()),
+    );
+
+    useEffect(() => {
+        getHolidays();
+    }, [date]);
+
+    useEffect(() => {
+        setDaysInCurrentMonth(
+            Array.from({
+                length: new Date(2020, date.getMonth() + 1, 0).getDate(),
+            }).map((_, i) => ++i),
+        );
+    }, [date.getMonth()]);
 
     return (
         <main>
@@ -175,14 +153,14 @@ function App() {
             <label>
                 Поиск:
                 <input
-                    type='text'
+                    type='search'
                     className='input'
                     onChange={({ target }) => {
-                        setSearchValue(target.value);
+                        setSearchValue(target.value.toLocaleLowerCase());
                     }}
                 />
             </label>
-            <HolidayList inputRef={inputRef} data={data} />
+            <HolidayList data={filterData} />
         </main>
     );
 }
