@@ -1,0 +1,8 @@
+{
+  "extends": ["stylelint-config-clean-order", "stylelint-config-standard"],
+  "rules": {
+    "declaration-property-value-no-unknown": true,
+    "selector-class-pattern": null,
+    "declaration-empty-line-before": null
+  }
+}
