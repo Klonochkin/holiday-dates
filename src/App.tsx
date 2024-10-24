@@ -59,7 +59,7 @@ function HolidayCard({
 function HolidayList({ data }: { data?: HolidayInfo[] }) {
     if (data && data.length > 0) {
         return (
-            <ul>
+            <ul className='list'>
                 {data.map(({ text, pages: [page] }, i) => (
                     <HolidayCard
                         key={i}
