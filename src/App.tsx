@@ -96,13 +96,11 @@ function App() {
             .then(({ holidays }: HolidayData) => setData(holidays));
     }
 
-    const filterData = data?.filter(({ text }) =>
+    const filteredData = data?.filter(({ text }) =>
         text.toLocaleLowerCase().includes(searchValue.trim()),
     );
 
-    useEffect(() => {
-        getHolidays();
-    }, [date]);
+    useEffect(getHolidays, [date]);
 
     useEffect(() => {
         setDaysInCurrentMonth(
@@ -160,7 +158,7 @@ function App() {
                     }}
                 />
             </label>
-            <HolidayList data={filterData} />
+            <HolidayList data={filteredData} />
         </main>
     );
 }
