@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 interface HolidayInfo {
     text: string;
@@ -55,10 +55,16 @@ function HolidayCard({
     );
 }
 
-function HolidayList({ data }: { data?: HolidayInfo[] }) {
+function HolidayList({
+    data,
+    inputRef,
+}: {
+    data?: HolidayInfo[];
+    inputRef: React.RefObject<HTMLUListElement>;
+}) {
     if (data && data.length > 0) {
         return (
-            <ul className='list'>
+            <ul className='list' ref={inputRef}>
                 {data.map(({ text, pages: [page] }, i) => (
                     <HolidayCard
                         key={i}
@@ -79,10 +85,16 @@ function App() {
     const [data, setData] = useState<HolidayInfo[]>();
     const [daysInCurrentMonth, setdaysInCurrentMonth] = useState<number[]>();
     const [date, setNewDate] = useState(today);
+    const [searchValue, setSearchValue] = useState('');
+    const inputRef = useRef<HTMLUListElement>(null);
 
     useEffect(() => {
         getHolidays();
     }, [date]);
+
+    useEffect(() => {
+        search();
+    }, [data, searchValue]);
 
     useEffect(() => {
         setdaysInCurrentMonth(
@@ -91,6 +103,21 @@ function App() {
             }).map((_, i) => ++i),
         );
     }, [date.getMonth()]);
+
+    function search() {
+        let myString: null | string = 'none';
+        const arrayParagraph = inputRef?.current?.querySelectorAll('p');
+        arrayParagraph?.forEach((p) => {
+            myString = p.textContent;
+            if (!searchValue) {
+                p?.parentElement?.classList.remove('visually-hidden');
+            } else if (myString?.includes(searchValue)) {
+                p?.parentElement?.classList.remove('visually-hidden');
+            } else {
+                p?.parentElement?.classList.add('visually-hidden');
+            }
+        });
+    }
 
     function nextDay() {
         setNewDate(new Date(date.setDate(date.getDate() + 1)));
@@ -145,7 +172,17 @@ function App() {
                     </option>
                 ))}
             </select>
-            <HolidayList data={data} />
+            <label>
+                Поиск:
+                <input
+                    type='text'
+                    className='input'
+                    onChange={({ target }) => {
+                        setSearchValue(target.value);
+                    }}
+                />
+            </label>
+            <HolidayList inputRef={inputRef} data={data} />
         </main>
     );
 }
