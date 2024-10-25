@@ -6,7 +6,12 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "lint": "eslint .",
+    "lint": "pnpm lint:es && pnpm lint:css && pnpm check-types && pnpm check-format",
+    "lint:fix": "pnpm lint:es --fix && pnpm lint:css -- --fix && pnpm format",
+    "lint:es": "eslint .",
+    "lint:es:fix": "eslint . --fix",
+    "lint:css": "stylelint .",
+    "lint:css:fix": "pnpm run lint:css -- --fix",
     "preview": "vite preview",
     "check-types": "tsc -p tsconfig.app.json",
     "check-format": "prettier --check .",
@@ -35,6 +40,9 @@
     "eslint-plugin-react-refresh": "^0.4.12",
     "globals": "^15.9.0",
     "prettier": "^3.3.3",
+    "stylelint": "^16.10.0",
+    "stylelint-config-clean-order": "^6.1.0",
+    "stylelint-config-standard": "^36.0.1",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.7.0",
     "vite": "^5.4.8"
