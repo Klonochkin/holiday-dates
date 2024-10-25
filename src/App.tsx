@@ -112,68 +112,72 @@ function App() {
 
     return (
         <main>
-            <button className='button' onClick={() => prevDay()}>
-                <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    width='15'
-                    height='15'
-                    viewBox='0 0 24 24'
-                    fill='none'
-                    stroke='currentColor'
-                    strokeWidth='3'
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    className='lucide lucide-corner-down-left'>
-                    <polyline points='9 10 4 15 9 20' />
-                    <path d='M20 4v7a4 4 0 0 1-4 4H4' />
-                </svg>
-            </button>
-            <select
-                value={date.getDate()}
-                name='day'
-                className='select'
-                onChange={(event) => {
-                    setNewDate(
-                        new Date(date.setDate(Number(event.target.value))),
-                    );
-                }}>
-                {daysInCurrentMonth?.map((day, i) => (
-                    <option value={day} key={i}>
-                        {day}
-                    </option>
-                ))}
-            </select>
-            <button className='button' onClick={() => nextDay()}>
-                <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    width='15'
-                    height='15'
-                    viewBox='0 0 24 24'
-                    fill='none'
-                    stroke='currentColor'
-                    strokeWidth='3'
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    className='lucide lucide-corner-down-right'>
-                    <polyline points='15 10 20 15 15 20' />
-                    <path d='M4 4v7a4 4 0 0 0 4 4h12' />
-                </svg>
-            </button>
-            <select
-                value={date.getMonth()}
-                name='month'
-                className='select'
-                onChange={(event) => {
-                    setNewDate(
-                        new Date(date.setMonth(Number(event.target.value))),
-                    );
-                }}>
-                {months?.map((day, i) => (
-                    <option value={i} key={i}>
-                        {day}
-                    </option>
-                ))}
-            </select>
+            <div className='controls'>
+                <button className='button' onClick={() => prevDay()}>
+                    <svg
+                        xmlns='http://www.w3.org/2000/svg'
+                        width='19'
+                        height='19'
+                        viewBox='0 0 24 24'
+                        fill='none'
+                        stroke='currentColor'
+                        strokeWidth='3'
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        className='icon'>
+                        <path d='m15 18-6-6 6-6' />
+                    </svg>
+                    <span className='visually-hidden'>назад</span>
+                </button>
+                <select
+                    aria-label='day'
+                    value={date.getDate()}
+                    name='day'
+                    className='select'
+                    onChange={(event) => {
+                        setNewDate(
+                            new Date(date.setDate(Number(event.target.value))),
+                        );
+                    }}>
+                    {daysInCurrentMonth?.map((day, i) => (
+                        <option value={day} key={i}>
+                            {day}
+                        </option>
+                    ))}
+                </select>
+                <button className='button' onClick={() => nextDay()}>
+                    <svg
+                        xmlns='http://www.w3.org/2000/svg'
+                        width='19'
+                        height='19'
+                        viewBox='0 0 24 24'
+                        fill='none'
+                        stroke='currentColor'
+                        strokeWidth='3'
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        className='icon'>
+                        <path d='m9 18 6-6-6-6' />
+                    </svg>
+                    <span className='visually-hidden'>вперёд</span>
+                </button>
+                <select
+                    aria-label='month'
+                    value={date.getMonth()}
+                    name='month'
+                    className='select'
+                    onChange={(event) => {
+                        setNewDate(
+                            new Date(date.setMonth(Number(event.target.value))),
+                        );
+                    }}>
+                    {months?.map((day, i) => (
+                        <option value={i} key={i}>
+                            {day}
+                        </option>
+                    ))}
+                </select>
+            </div>
             <label className='search'>
                 <input
                     type='search'

@@ -99,10 +99,37 @@
 
     background: #323232;
     border: 1px rgb(198 198 198) solid;
-    border-radius: 0.35rem;
+    border-radius: 15px;
 }
 
 .search {
     display: block;
     margin: 15px;
+}
+
+.icon {
+    display: block;
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.visually-hidden {
+    position: absolute;
+
+    overflow: hidden;
+
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+
+    white-space: nowrap;
+
+    clip: rect(0 0 0 0);
+    clip-path: inset(100%);
+    border: 0;
 }
