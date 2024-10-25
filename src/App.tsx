@@ -113,7 +113,20 @@ function App() {
     return (
         <main>
             <button className='button' onClick={() => prevDay()}>
-                назад
+                <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    width='15'
+                    height='15'
+                    viewBox='0 0 24 24'
+                    fill='none'
+                    stroke='currentColor'
+                    strokeWidth='3'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    className='lucide lucide-corner-down-left'>
+                    <polyline points='9 10 4 15 9 20' />
+                    <path d='M20 4v7a4 4 0 0 1-4 4H4' />
+                </svg>
             </button>
             <select
                 value={date.getDate()}
@@ -131,7 +144,20 @@ function App() {
                 ))}
             </select>
             <button className='button' onClick={() => nextDay()}>
-                вперёд
+                <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    width='15'
+                    height='15'
+                    viewBox='0 0 24 24'
+                    fill='none'
+                    stroke='currentColor'
+                    strokeWidth='3'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    className='lucide lucide-corner-down-right'>
+                    <polyline points='15 10 20 15 15 20' />
+                    <path d='M4 4v7a4 4 0 0 0 4 4h12' />
+                </svg>
             </button>
             <select
                 value={date.getMonth()}
@@ -149,10 +175,10 @@ function App() {
                 ))}
             </select>
             <label className='search'>
-                Поиск:
                 <input
                     type='search'
                     className='input'
+                    placeholder='Поиск'
                     onChange={({ target }) => {
                         setSearchValue(target.value.toLocaleLowerCase());
                     }}

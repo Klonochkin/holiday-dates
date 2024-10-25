@@ -21,11 +21,11 @@
 .button {
     cursor: pointer;
 
-    padding: 0.25rem;
+    padding: 0.75rem;
 
-    font-size: 15px;
+    color: whitesmoke;
 
-    background-color: rgb(255 255 255);
+    background: #323232;
     border: 1px rgb(198 198 198) solid;
     border-radius: 0.35rem;
 }
@@ -33,15 +33,15 @@
 .select {
     cursor: pointer;
 
-    width: 6rem;
     margin: 15px;
-    padding: 0.25rem;
+    padding: 0.75rem;
 
     font-size: 15px;
-    color: #000;
+    font-weight: 750;
+    color: whitesmoke;
     text-align: left;
 
-    background: rgb(255 255 255);
+    background: #323232;
     border: 1px rgb(210 210 210) solid;
     border-radius: 0.35rem;
 }
@@ -91,15 +91,18 @@
 }
 
 .input {
-    margin-left: 15px;
-    padding: 0.25rem;
+    width: 100%;
+    padding: 0.75rem;
 
-    font-size: 15px;
+    font-size: 20px;
+    color: whitesmoke;
 
+    background: #323232;
     border: 1px rgb(198 198 198) solid;
     border-radius: 0.35rem;
 }
 
 .search {
     display: block;
+    margin: 15px;
 }
